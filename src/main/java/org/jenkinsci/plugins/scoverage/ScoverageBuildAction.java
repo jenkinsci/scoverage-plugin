@@ -7,7 +7,6 @@ import hudson.model.DirectoryBrowserSupport;
 import hudson.model.Result;
 import hudson.model.Run;
 import jenkins.tasks.SimpleBuildStep;
-import org.kohsuke.stapler.StaplerProxy;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.export.Exported;
@@ -23,11 +22,9 @@ import jenkins.model.RunAction2;
 public class ScoverageBuildAction implements RunAction2, SimpleBuildStep.LastBuildAction {
 
     private transient Run<?, ?> run;
-    private final FilePath buildPath;
     private final ScoverageResult result;
 
-    public ScoverageBuildAction(FilePath buildPath, ScoverageResult result) {
-        this.buildPath = buildPath;
+    public ScoverageBuildAction(ScoverageResult result) {
         this.result = result;
     }
 
@@ -80,7 +77,7 @@ public class ScoverageBuildAction implements RunAction2, SimpleBuildStep.LastBui
     }
 
     public DirectoryBrowserSupport doDynamic(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException, InterruptedException {
-        return new DirectoryBrowserSupport(this, buildPath.child(getUrlName()), "Scoverage HTML Report", "", false);
+        return new DirectoryBrowserSupport(this, new FilePath(run.getRootDir()).child(getUrlName()), "Scoverage HTML Report", "", false);
     }
 
     @Override
