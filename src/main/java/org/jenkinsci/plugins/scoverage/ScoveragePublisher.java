@@ -65,7 +65,7 @@ public class ScoveragePublisher extends Recorder implements SimpleBuildStep {
 
         copyReport(scovPath, buildPath, new BuildListenerAdapter(listener));
         ScoverageResult result = processReport(run, buildPath);
-        run.addAction(new ScoverageBuildAction(run, buildPath, result));
+        run.addAction(new ScoverageBuildAction(buildPath, result));
     }
 
     private static final class ScovFinder implements FilePath.FileCallable<File> {

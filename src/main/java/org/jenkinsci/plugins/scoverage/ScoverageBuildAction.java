@@ -17,18 +17,28 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import jenkins.model.RunAction2;
 
 @ExportedBean
-public class ScoverageBuildAction implements Action, SimpleBuildStep.LastBuildAction {
+public class ScoverageBuildAction implements RunAction2, SimpleBuildStep.LastBuildAction {
 
-    private final Run<?, ?> run;
+    private transient Run<?, ?> run;
     private final FilePath buildPath;
     private final ScoverageResult result;
 
-    public ScoverageBuildAction(Run<?, ?> run, FilePath buildPath, ScoverageResult result) {
-        this.run = run;
+    public ScoverageBuildAction(FilePath buildPath, ScoverageResult result) {
         this.buildPath = buildPath;
         this.result = result;
+    }
+
+    @Override
+    public void onAttached(Run<?, ?> r) {
+        run = r;
+    }
+
+    @Override
+    public void onLoad(Run<?, ?> r) {
+        run = r;
     }
 
     public String getIconFileName() {
